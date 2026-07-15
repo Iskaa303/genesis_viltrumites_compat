@@ -6,7 +6,8 @@
   "minVersion": "0.8",
   "mixins": [
     "PlanetToSpaceTeleporterMixin",
-    "SpaceToPlanetTeleporterMixin"
+    "SpaceToPlanetTeleporterMixin",
+    "ViltrumiteFlightSpeedMixin"
   ],
   "injectors": {
     "defaultRequire": 1

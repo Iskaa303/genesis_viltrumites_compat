@@ -1,42 +1,44 @@
 package net.iskaa303.genesis_viltrumites.mixin;
 
-import com.baranhan123.viltrumiteflight.util.FlightState;
-import com.baranhan123.viltrumiteflight.util.ViltrumiteFlightPlayer;
-import net.minecraft.server.level.ServerPlayer;
+import com.baranhan123.viltrumiteflight.config.ViltrumiteConfig;
+import net.iskaa303.genesis_viltrumites.ViltrumiteSpeedAccessor;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
+import org.spongepowered.asm.mixin.Implements;
+import org.spongepowered.asm.mixin.Interface;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import shipwrights.genesis.GenesisMod;
 
-/**
- * Boosts Viltrumite flight speed 10x when the player is in Genesis space
- * (dimension {@code genesis:great_unknown}). This runs after Viltrumite's own
- * {@code PlayerEntityMixin.onTick} has already set the flight velocity,
- * so we just scale the result.
- */
 @Mixin(Player.class)
+@Implements(@Interface(iface = ViltrumiteSpeedAccessor.class, prefix = "viltrimitespeed$"))
 public class ViltrumiteFlightSpeedMixin {
 
+    @Unique
+    public float viltrumites$speedMultiplier = 1.0f;
+
+    @Unique
+    private float viltrumites$savedGlobalMaxSpeed;
+
+    @Unique
+    public float viltrimitespeed$getSpeedMultiplier() {
+        return viltrumites$speedMultiplier;
+    }
+
+    @Unique
+    public void viltrimitespeed$setSpeedMultiplier(float multiplier) {
+        viltrumites$speedMultiplier = multiplier;
+    }
+
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void viltrumites$applyMultiplier(CallbackInfo ci) {
+        viltrumites$savedGlobalMaxSpeed = ViltrumiteConfig.INSTANCE.maxFlightSpeed;
+        ViltrumiteConfig.INSTANCE.maxFlightSpeed *= viltrumites$speedMultiplier;
+    }
+
     @Inject(method = "tick", at = @At("RETURN"))
-    private void viltrumites$boostInSpace(CallbackInfo ci) {
-        Player player = (Player) (Object) this;
-        // Only server-side matters — the server is authoritative for movement
-        if (!(player instanceof ServerPlayer serverPlayer)) return;
-
-        // Check if the player is in Genesis space
-        if (!player.level().dimension().location().equals(GenesisMod.SPACE_DIM)) return;
-
-        // Check if Viltrumite flight is active on this player
-        if (!(serverPlayer instanceof ViltrumiteFlightPlayer flightPlayer)) return;
-        if (flightPlayer.getFlightState() == FlightState.NONE) return;
-
-        // 10x the current velocity
-        Vec3 vel = player.getDeltaMovement();
-        if (vel.lengthSqr() > 1.0e-6) {
-            player.setDeltaMovement(vel.scale(10.0));
-        }
+    private void viltrumites$restoreGlobal(CallbackInfo ci) {
+        ViltrumiteConfig.INSTANCE.maxFlightSpeed = viltrumites$savedGlobalMaxSpeed;
     }
 }

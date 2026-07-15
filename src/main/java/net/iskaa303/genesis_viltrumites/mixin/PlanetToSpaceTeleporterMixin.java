@@ -17,12 +17,8 @@ import shipwrights.genesis.config.GenesisCommonConfig;
 import shipwrights.genesis.space.VantagePoint;
 import shipwrights.genesis.teleportation.impl.EntityTeleporter;
 import shipwrights.genesis.teleportation.integration.PlanetToSpaceTeleporter;
+import net.iskaa303.genesis_viltrumites.ViltrumiteSpeedAccessor;
 
-/**
- * Injects player teleportation into PlanetToSpaceTeleporter.tick().
- * Players flying above the atmosphere exit height via Viltrumite flight
- * get teleported to the space dimension, matching ship behavior.
- */
 @Mixin(PlanetToSpaceTeleporter.class)
 public class PlanetToSpaceTeleporterMixin {
 
@@ -49,6 +45,9 @@ public class PlanetToSpaceTeleporterMixin {
                     Quaterniondc targetRot = new Quaterniond();
                     EntityTeleporter.teleportEntityAndPassengers(player, spaceLevel,
                             VectorConversionsMCKt.toMinecraft(targetPos), targetRot);
+                    ((ViltrumiteSpeedAccessor) player).setSpeedMultiplier(
+                            ((ViltrumiteSpeedAccessor) player).getSpeedMultiplier() * 30.0f
+                    );
                 }
             }
         }

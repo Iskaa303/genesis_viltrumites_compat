@@ -19,14 +19,9 @@ import shipwrights.genesis.config.GenesisCommonConfig;
 import shipwrights.genesis.space.Celestial;
 import shipwrights.genesis.teleportation.impl.EntityTeleporter;
 import shipwrights.genesis.teleportation.integration.SpaceToPlanetTeleporter;
-
+import net.iskaa303.genesis_viltrumites.ViltrumiteSpeedAccessor;
 import java.util.Comparator;
 
-/**
- * Injects player teleportation into SpaceToPlanetTeleporter.tick().
- * Players flying into a celestial via Viltrumite flight get teleported
- * down to the planet surface, matching ship behavior.
- */
 @Mixin(SpaceToPlanetTeleporter.class)
 public class SpaceToPlanetTeleporterMixin {
 
@@ -40,7 +35,6 @@ public class SpaceToPlanetTeleporterMixin {
             Celestial nearest = viltrumites$getNearestPlanetForPlayer(playerPos, ticks, registry);
             if (nearest == null) continue;
 
-            // Inline of private SpaceToPlanetTeleporter.getTargetLevel
             ServerLevel targetLevel = level.getServer().getLevel(
                     ResourceKey.create(
                             net.minecraft.core.registries.Registries.DIMENSION,
@@ -49,7 +43,6 @@ public class SpaceToPlanetTeleporterMixin {
             );
             if (targetLevel == null) continue;
 
-            // Inline of private SpaceToPlanetTeleporter.computePlanetTarget
             int landingAccuracy = 8;
             ChunkPos landingChunkPos = new ChunkPos(
                     level.random.nextInt(landingAccuracy * 2 + 1) - landingAccuracy,
@@ -64,6 +57,9 @@ public class SpaceToPlanetTeleporterMixin {
             Quaterniond rotation = new Quaterniond();
             EntityTeleporter.teleportEntityAndPassengers(player, targetLevel,
                     VectorConversionsMCKt.toMinecraft(newPos), rotation);
+            ((ViltrumiteSpeedAccessor) player).setSpeedMultiplier(
+                    ((ViltrumiteSpeedAccessor) player).getSpeedMultiplier() / 30.0f
+            );
         }
     }
 

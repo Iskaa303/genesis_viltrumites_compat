@@ -1,0 +1,48 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+license = "GPL-3.0-only"
+
+[[mods]]
+modId = "genesis_viltrumites"
+version = "${version}"
+displayName = "Genesis: Viltrumites"
+authors = "Iskaa303"
+description = '''
+A compatibility layer between Genesis and Viltrumite Flight. Lets Viltrumite flight work seamlessly in Genesis space dimensions.
+'''
+logoFile = "genesis_viltrumites.png"
+
+[[dependencies.genesis_viltrumites]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.genesis_viltrumites]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.genesis_viltrumites]]
+modId = "genesis"
+mandatory = true
+versionRange = "[1.20.1-0.7,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.genesis_viltrumites]]
+modId = "valkyrienskies"
+mandatory = true
+versionRange = "[2.4.0,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.genesis_viltrumites]]
+modId = "viltrumite"
+mandatory = false
+versionRange = "[1.5.1,)"
+ordering = "NONE"
+side = "BOTH"

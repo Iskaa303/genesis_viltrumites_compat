@@ -1,11 +1,13 @@
 package net.iskaa303.genesis_viltrumites.mixin.genesis;
 
+import com.baranhan123.viltrumitecore.util.ViltrumiteCorePlayer;
 import net.iskaa303.genesis_viltrumites.viltrumite.PerPlayerSpeedManager;
 import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.ChunkPos;
 import org.joml.Quaterniond;
 import org.joml.Vector3d;
@@ -55,8 +57,20 @@ public class SpaceToPlanetTeleporterMixin {
             );
 
             Quaterniond rotation = new Quaterniond();
-            EntityTeleporter.teleportEntityAndPassengers(player, targetLevel,
-                    VectorConversionsMCKt.toMinecraft(newPos), rotation);
+            var mcPos = VectorConversionsMCKt.toMinecraft(newPos);
+
+            if (player instanceof ViltrumiteCorePlayer vil) {
+                LivingEntity g = vil.getGrabbedTarget();
+                if (g != null) {
+                    g = EntityTeleporter.teleportEntityAndPassengers(g, targetLevel, mcPos, rotation);
+                    EntityTeleporter.teleportEntityAndPassengers(player, targetLevel, mcPos, rotation);
+                    vil.setGrabbedTarget(g);
+                } else {
+                    EntityTeleporter.teleportEntityAndPassengers(player, targetLevel, mcPos, rotation);
+                }
+            } else {
+                EntityTeleporter.teleportEntityAndPassengers(player, targetLevel, mcPos, rotation);
+            }
 
             PerPlayerSpeedManager.setToPlanetDefault(player);
         }

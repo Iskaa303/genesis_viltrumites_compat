@@ -9,6 +9,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class PerPlayerSpeedManager {
     private static final Map<UUID, Float> PLAYER_SPEEDS = new ConcurrentHashMap<>();
+    private static float planetDefaultSpeed;
+
+    public static void init() {
+        planetDefaultSpeed = ViltrumiteConfig.INSTANCE.maxFlightSpeed;
+    }
 
     private PerPlayerSpeedManager() {}
 
@@ -21,7 +26,7 @@ public final class PerPlayerSpeedManager {
     }
 
     public static void setToPlanetDefault(Player player) {
-        PLAYER_SPEEDS.put(player.getUUID(), ViltrumiteConfig.INSTANCE.maxFlightSpeed);
+        PLAYER_SPEEDS.put(player.getUUID(), planetDefaultSpeed);
     }
 
     public static void setToSpaceDefault(Player player) {

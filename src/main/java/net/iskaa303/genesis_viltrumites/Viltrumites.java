@@ -3,6 +3,7 @@ package net.iskaa303.genesis_viltrumites;
 import net.iskaa303.genesis_viltrumites.command.FlightSpeedCommand;
 import net.iskaa303.genesis_viltrumites.config.CompatConfig;
 import net.iskaa303.genesis_viltrumites.event.SpaceTransitionHandler;
+import net.iskaa303.genesis_viltrumites.viltrumite.PerPlayerSpeedManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -16,6 +17,7 @@ public final class Viltrumites {
 
     public Viltrumites() {
         CompatConfig.getInstance();
+        PerPlayerSpeedManager.init();
         MinecraftForge.EVENT_BUS.register(new SpaceTransitionHandler());
         MinecraftForge.EVENT_BUS.addListener(this::onRegisterCommands);
         LOGGER.info("Genesis: Viltrumites loaded.");

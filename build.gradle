@@ -124,6 +124,9 @@ dependencies {
     // Viltrumite mod — runtime for testing
     modImplementation("curse.maven:viltrumite-flight-1528087:8411529")
     modImplementation("curse.maven:viltrumite-1553010:8430880")
+
+    // Immersive Portals
+    modImplementation("maven.modrinth:zf4Szzx2:Q6Z7eOLL")
 }
 
 processResources {

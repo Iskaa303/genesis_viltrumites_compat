@@ -1,15 +1,15 @@
 {
   "required": true,
-  "package": "net.iskaa303.genesis_viltrumites.mixin",
-  "refmap": "mixins.genesis_viltrumites.refmap.json",
-  "compatibilityLevel": "JAVA_17",
   "minVersion": "0.8",
-  "mixins": [
-    "PlanetToSpaceTeleporterMixin",
-    "SpaceToPlanetTeleporterMixin",
-    "ViltrumiteFlightSpeedMixin"
-  ],
+  "package": "net.iskaa303.genesis_viltrumites.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "mixins.genesis_viltrumites.refmap.json",
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "mixins": [
+    "genesis.PlanetToSpaceTeleporterMixin",
+    "genesis.SpaceToPlanetTeleporterMixin",
+    "minecraft.PlayerTickSpeedEnforcer"
+  ]
 }

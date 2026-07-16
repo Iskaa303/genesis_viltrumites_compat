@@ -1,5 +1,6 @@
-package net.iskaa303.genesis_viltrumites.mixin;
+package net.iskaa303.genesis_viltrumites.mixin.genesis;
 
+import net.iskaa303.genesis_viltrumites.viltrumite.PerPlayerSpeedManager;
 import net.minecraft.core.Registry;
 import net.minecraft.core.SectionPos;
 import net.minecraft.resources.ResourceKey;
@@ -19,7 +20,6 @@ import shipwrights.genesis.config.GenesisCommonConfig;
 import shipwrights.genesis.space.Celestial;
 import shipwrights.genesis.teleportation.impl.EntityTeleporter;
 import shipwrights.genesis.teleportation.integration.SpaceToPlanetTeleporter;
-import net.iskaa303.genesis_viltrumites.ViltrumiteSpeedAccessor;
 import java.util.Comparator;
 
 @Mixin(SpaceToPlanetTeleporter.class)
@@ -57,9 +57,8 @@ public class SpaceToPlanetTeleporterMixin {
             Quaterniond rotation = new Quaterniond();
             EntityTeleporter.teleportEntityAndPassengers(player, targetLevel,
                     VectorConversionsMCKt.toMinecraft(newPos), rotation);
-            ((ViltrumiteSpeedAccessor) player).setSpeedMultiplier(
-                    ((ViltrumiteSpeedAccessor) player).getSpeedMultiplier() / 30.0f
-            );
+
+            PerPlayerSpeedManager.setToPlanetDefault(player);
         }
     }
 

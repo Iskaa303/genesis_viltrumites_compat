@@ -1,5 +1,6 @@
-package net.iskaa303.genesis_viltrumites.mixin;
+package net.iskaa303.genesis_viltrumites.mixin.genesis;
 
+import net.iskaa303.genesis_viltrumites.viltrumite.PerPlayerSpeedManager;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
@@ -17,7 +18,6 @@ import shipwrights.genesis.config.GenesisCommonConfig;
 import shipwrights.genesis.space.VantagePoint;
 import shipwrights.genesis.teleportation.impl.EntityTeleporter;
 import shipwrights.genesis.teleportation.integration.PlanetToSpaceTeleporter;
-import net.iskaa303.genesis_viltrumites.ViltrumiteSpeedAccessor;
 
 @Mixin(PlanetToSpaceTeleporter.class)
 public class PlanetToSpaceTeleporterMixin {
@@ -35,7 +35,6 @@ public class PlanetToSpaceTeleporterMixin {
             Vector3d playerPos = new Vector3d(player.getX(), player.getY(), player.getZ());
             if (playerPos.y() > GenesisCommonConfig.getAtmosphereExitHeight()) {
                 if (VantagePoint.get(level, playerPos, ticks, 0f) instanceof VantagePoint.OnCelestial vantagePoint) {
-                    // Inline of private PlanetToSpaceTeleporter.computeSpaceTarget
                     Vector3d targetPos = new Vector3d(0, vantagePoint.celestial().getActualSize() + 20, 0);
                     vantagePoint.cameraRotationFromNorthPole()
                             .conjugate(new Quaterniond()).transform(targetPos);
@@ -45,9 +44,8 @@ public class PlanetToSpaceTeleporterMixin {
                     Quaterniondc targetRot = new Quaterniond();
                     EntityTeleporter.teleportEntityAndPassengers(player, spaceLevel,
                             VectorConversionsMCKt.toMinecraft(targetPos), targetRot);
-                    ((ViltrumiteSpeedAccessor) player).setSpeedMultiplier(
-                            ((ViltrumiteSpeedAccessor) player).getSpeedMultiplier() * 30.0f
-                    );
+
+                    PerPlayerSpeedManager.setToSpaceDefault(player);
                 }
             }
         }
